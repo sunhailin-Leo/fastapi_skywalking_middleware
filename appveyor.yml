@@ -1,0 +1,14 @@
+version: 0.1.{build}
+environment:
+  matrix:
+    - PYTHON: C:\\Python36-x64
+      PYTHON_VERSION: 3.6
+    - PYTHON: C:\\Python37-x64
+      PYTHON_VERSION: 3.7
+    - PYTHON: C:\\Python38-x64
+      PYTHON_VERSION: 3.8
+install:
+  - cmd: '%PYTHON%\\python.exe -m pip install -r requirements.txt && cd test && %PYTHON%\\python.exe -m pip install -r requirements.txt'
+build: off
+test_script:
+  - cmd: '%PYTHON%/Scripts/pytest . --cov=fastapi_skywalking_middleware --cov=test && cd .. && %PYTHON%/Scripts/flake8 --exclude build --max-line-length 89 --ignore=F401'
