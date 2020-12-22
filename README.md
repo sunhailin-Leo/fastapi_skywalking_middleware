@@ -5,10 +5,10 @@
 </p>
 <p align="center">
     <a href="https://travis-ci.org/sunhailin-Leo/fastapi_skywalking_middleware">
-        <img src="https://travis-ci.com/sunhailin-Leo/fastapi_skywalking_middleware.svg?branch=main" alt="Travis Build Status">
+        <img src="https://travis-ci.org/sunhailin-Leo/fastapi_skywalking_middleware.svg?branch=main" alt="Travis Build Status">
     </a>
     <a href="https://ci.appveyor.com/project/sunhailin-Leo/fastapi_skywalking_middleware">
-        <img src="https://ci.appveyor.com/api/projects/status/b77so9mpxguhyy1a/branch/main?svg=true" alt="Appveyor Build Status">
+        <img src="https://ci.appveyor.com/api/projects/status/hbis92gspadtfs9c/branch/main?svg=true" alt="Appveyor Build Status">
     </a>
     <a href="https://codecov.io/gh/sunhailin-Leo/fastapi_skywalking_middleware">
         <img src="https://codecov.io/gh/sunhailin-Leo/fastapi_skywalking_middleware/branch/main/graph/badge.svg" alt="Codecov">
