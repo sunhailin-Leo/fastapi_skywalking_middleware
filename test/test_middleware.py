@@ -1,3 +1,4 @@
+import asyncio
 import time
 import pytest
 
@@ -17,7 +18,7 @@ def test_middleware():
 
         @app.route("/test")
         async def normal_request(request):
-            time.sleep(0.5)
+            await asyncio.sleep(0.5)
             return JSONResponse({"retMsg": "Normal Request test Success!"})
 
         return app

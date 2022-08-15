@@ -1,19 +1,25 @@
-import time
+import asyncio
 
 import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
-from starlette.requests import Request
-
-from skywalking.trace.tags import Tag
 from skywalking.decorators import trace
 from skywalking.trace.context import Span
+from skywalking.trace.tags import Tag
+from starlette.requests import Request
 
 from fastapi_skywalking_middleware.middleware import FastAPISkywalkingMiddleware
 
 # Init server context
 app = FastAPI()
-app.add_middleware(FastAPISkywalkingMiddleware, collector="10.30.8.116:30799")
+app.add_middleware(
+    FastAPISkywalkingMiddleware,
+    service_name="your-service-name",
+    service_instance="your-service-instance",
+    collector_address="10.30.8.116:30799",
+    protocol="grpc",
+    authentication="your-authentication",
+)
 
 
 class RequestItem(BaseModel):
@@ -22,18 +28,18 @@ class RequestItem(BaseModel):
 
 @trace()
 async def inner_function_3():
-    time.sleep(0.1)
+    await asyncio.sleep(0.1)
 
 
 @trace()
 async def inner_function_2():
-    time.sleep(0.2)
+    await asyncio.sleep(0.2)
 
 
 @trace()
 async def inner_function():
     # Function
-    time.sleep(0.05)
+    await asyncio.sleep(0.05)
     await inner_function_2()
 
 
@@ -42,12 +48,17 @@ async def api_post_test(item: RequestItem, request: Request):
     # If request header is application/json,
     # so you can set the request data to Skywalking Trace Tag
     ctx: Span = request.scope.get("trace_ctx")
-    ctx.tag(tag=Tag(key="request.body", val=item.json(), overridable=False))
+
+    class BodyTag(Tag):
+        key = "request.body"
+        overridable = False
+
+    ctx.tag(tag=BodyTag(val=item.json()))
 
     # Test Function 1, Function 2 is inside the Function 1
     await inner_function()
 
-    time.sleep(0.1)
+    await asyncio.sleep(0.1)
 
     # Test Function 3
     await inner_function_3()

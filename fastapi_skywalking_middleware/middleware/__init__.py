@@ -1,14 +1,12 @@
-import time
 import hashlib
+import time
 
-from starlette.requests import Request
-from starlette.types import ASGIApp, Message, Receive, Scope, Send
-
+from skywalking import config, agent, Layer, Component
 from skywalking.trace import tags
-from skywalking.trace.tags import Tag
 from skywalking.trace.carrier import Carrier
 from skywalking.trace.context import Span, get_context
-from skywalking import config, agent, Layer, Component
+from starlette.requests import Request
+from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 
 class FastAPISkywalkingMiddleware:
@@ -16,21 +14,27 @@ class FastAPISkywalkingMiddleware:
             self,
             app: ASGIApp,
             *,
-            service: str = "FastAPI",
-            instance: str = None,
-            collector: str = "127.0.0.1:11800",
-            protocol_type: str = "grpc",
-            token: str = None,
+            service_name: str = "FastAPI",
+            service_instance: str = None,
+            collector_address: str = "127.0.0.1:11800",
+            protocol: str = "grpc",
+            authentication: str = None,
+            log_reporter_active=False,
+            log_reporter_level='INFO',
+            **kwargs,
     ):
         self._app = app
 
         # initialize skywalking agent
         config.init(
-            service=service,
-            instance=instance,
-            collector=collector,
-            protocol_type=protocol_type,
-            token=token,
+            service_name=service_name,
+            service_instance=service_instance,
+            collector_address=collector_address,
+            protocol=protocol,
+            authentication=authentication,
+            log_reporter_active=log_reporter_active,
+            log_reporter_level=log_reporter_level,
+            **kwargs,
         )
         agent.start()
 
@@ -48,7 +52,7 @@ class FastAPISkywalkingMiddleware:
         span.layer = Layer.Http
         span.component = Component.Requests
         span.peer = f"{request.client.host}:{request.client.port}"
-        span.tag(tag=Tag(key=tags.HttpMethod, val=request.method, overridable=False))
+        span.tag(tag=tags.TagHttpMethod(val=request.method))
         return span
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
@@ -81,6 +85,6 @@ class FastAPISkywalkingMiddleware:
             span.raised()
         finally:
             if scope["type"] == "http":
-                span.tag(Tag(key=tags.HttpUrl, val=str(request.url), overridable=False))
-                span.tag(Tag(key=tags.HttpStatus, val=status_code, overridable=False))
+                span.tag(tags.TagHttpStatusCode(val=status_code))
+                span.tag(tags.TagHttpURL(val=str(request.url)))
                 span.stop()

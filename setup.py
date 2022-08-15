@@ -13,7 +13,7 @@ __description__ = "A FastAPI Middleware of Skywalking(APM) " \
 __url__ = "https://github.com/sunhailin-Leo/fastapi_skywalking_middleware"
 __author_email__ = "379978424@qq.com"
 __license__ = "MIT"
-__requires__ = ["fastapi", "apache-skywalking"]
+__requires__ = ["fastapi", "apache-skywalking>=0.8.0"]
 __keywords__ = ["fastapi", "apache-skywalking", "skywalking", "middleware"]
 
 # Load the package's _version.py module as a dictionary.
