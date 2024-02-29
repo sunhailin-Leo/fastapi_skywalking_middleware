@@ -13,7 +13,8 @@ from fastapi_skywalking_middleware.middleware import FastAPISkywalkingMiddleware
 
 # Init server context
 app = FastAPI()
-app.add_middleware(FastAPISkywalkingMiddleware, collector="10.30.8.116:30799")
+# app.add_middleware(FastAPISkywalkingMiddleware, collector="10.30.8.116:30799")
+app.add_middleware(FastAPISkywalkingMiddleware, collector="10.30.8.116:30799", service='your awesome service', instance=f'your instance name - pid: {os.getpid()}')
 
 
 class RequestItem(BaseModel):
