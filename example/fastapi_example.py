@@ -14,11 +14,13 @@ from fastapi_skywalking_middleware.middleware import FastAPISkywalkingMiddleware
 # Init server context
 app = FastAPI()
 # app.add_middleware(FastAPISkywalkingMiddleware, collector="10.30.8.116:30799")
+# 需要配置agent_instance_name
 app.add_middleware(FastAPISkywalkingMiddleware, collector="10.30.8.116:30799", service='your awesome service', instance=f'your instance name - pid: {os.getpid()}')
 
 # # 在这次使用尝试中，我的fastapi版本是0.61.2  fastapi-skywalking-middleware版本0.1.0
-# # 实际使用，发现有几处需要进行修改的是, fastapi-skywalking-middleware\middleware\__init__.py 59行、
-# 1. skywalking\trace\tags.py Tag类构造函数缺少对key和overridable的初始化，以下是我修改后的代码（或许有其他好办法）
+# # 实际使用，发现有几处需要进行修改的是
+# 1. fastapi-skywalking-middleware\middleware\__init__.py  28、58、92、94行
+# 2. skywalking\trace\tags.py Tag类构造函数缺少对key和overridable的初始化，以下是我修改后的代码（或许有其他好办法）
 # class Tag:
 #     key: str = ''
 #     overridable: bool = True
