@@ -16,6 +16,21 @@ app = FastAPI()
 # app.add_middleware(FastAPISkywalkingMiddleware, collector="10.30.8.116:30799")
 app.add_middleware(FastAPISkywalkingMiddleware, collector="10.30.8.116:30799", service='your awesome service', instance=f'your instance name - pid: {os.getpid()}')
 
+# # 在这次使用尝试中，我的fastapi版本是0.61.2  fastapi-skywalking-middleware版本0.1.0
+# # 实际使用，发现有几处需要进行修改的是, fastapi-skywalking-middleware\middleware\__init__.py 59行、
+# 1. skywalking\trace\tags.py Tag类构造函数缺少对key和overridable的初始化，以下是我修改后的代码（或许有其他好办法）
+# class Tag:
+#     key: str = ''
+#     overridable: bool = True
+#     # def __init__(self, val):  # 修改前，构造函数缺少key和overridable参数的初始化
+#     def __init__(self, val, key="", overridable=True):
+#         try:
+#             self.val = str(val)
+#             # 增加初始化赋值
+#             self.key = key
+#             self.overridable = overridable
+#         except ValueError:
+#             raise ValueError('Tag value must be a string or convertible to a string')
 
 class RequestItem(BaseModel):
     waybill_id: str = ""
