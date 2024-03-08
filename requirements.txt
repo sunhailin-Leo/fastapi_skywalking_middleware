@@ -1,2 +1,2 @@
-fastapi==0.103.2
+fastapi
 apache-skywalking==1.0.1
