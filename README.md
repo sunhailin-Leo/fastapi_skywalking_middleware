@@ -47,7 +47,8 @@ $ pip install fastapi_skywalking_middleware -U
 
 ## 📝 Example
 
-Jump to example folder.[Example](https://github.com/sunhailin-Leo/fastapi_skywalking_middleware/blob/main/example/fastapi_example.py)
+Jump to example folder.[Example](https://github.com/Shao-jm/fastapi_skywalking_middleware/blob/main/example/fastapi_example.py)
+
 
 ## ⛏ Test the Code
 

@@ -1,2 +1,2 @@
 fastapi
-apache-skywalking
+apache-skywalking==1.0.1

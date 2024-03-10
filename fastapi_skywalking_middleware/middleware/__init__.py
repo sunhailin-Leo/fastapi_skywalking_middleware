@@ -26,11 +26,11 @@ class FastAPISkywalkingMiddleware:
 
         # initialize skywalking agent
         config.init(
-            service=service,
-            instance=instance,
-            collector=collector,
-            protocol_type=protocol_type,
-            token=token,
+            agent_name=service,
+            agent_instance_name=instance,
+            agent_collector_backend_services=collector,
+            agent_protocol=protocol_type,
+            # token=token,
         )
         agent.start()
 
@@ -48,7 +48,7 @@ class FastAPISkywalkingMiddleware:
         span.layer = Layer.Http
         span.component = Component.Requests
         span.peer = f"{request.client.host}:{request.client.port}"
-        span.tag(tag=Tag(key=tags.HttpMethod, val=request.method, overridable=False))
+        span.tag(tag=Tag(key=tags.TagHttpMethod.key, val=request.method, overridable=False))
         return span
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
@@ -81,6 +81,6 @@ class FastAPISkywalkingMiddleware:
             span.raised()
         finally:
             if scope["type"] == "http":
-                span.tag(Tag(key=tags.HttpUrl, val=str(request.url), overridable=False))
-                span.tag(Tag(key=tags.HttpStatus, val=status_code, overridable=False))
+                span.tag(Tag(key=tags.TagHttpURL.key, val=str(request.url), overridable=False))
+                span.tag(Tag(key=tags.TagHttpStatusCode.key, val=status_code, overridable=False))
                 span.stop()
