@@ -1,4 +1,9 @@
+nose
+nose2
+codecov
+coverage
 flake8
+mccabe
 pytest
 pytest-cov
 fastapi
