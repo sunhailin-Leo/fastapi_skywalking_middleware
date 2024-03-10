@@ -1,3 +1,4 @@
+import os
 import time
 
 import uvicorn
@@ -15,7 +16,12 @@ from fastapi_skywalking_middleware.middleware import FastAPISkywalkingMiddleware
 app = FastAPI()
 # app.add_middleware(FastAPISkywalkingMiddleware, collector="10.30.8.116:30799")
 # 需要配置agent_instance_name
-app.add_middleware(FastAPISkywalkingMiddleware, collector="10.30.8.116:30799", service='your awesome service', instance=f'your instance name - pid: {os.getpid()}')
+app.add_middleware(
+    FastAPISkywalkingMiddleware,
+    collector="your skywalking collector host",
+    service='your awesome service',
+    instance=f'your instance name - pid: {os.getpid()}',
+)
 
 # # 在这次使用尝试中，我的fastapi版本是0.61.2  fastapi-skywalking-middleware版本0.1.0
 # # 实际使用，发现有几处需要进行修改的是
